@@ -3,7 +3,7 @@ package com.thesniffers.dao.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -16,7 +16,8 @@ public class ShoppingBasket {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Column(name = "id", updatable = false, nullable = false)
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
+    @Column(name = "id", columnDefinition = "BINARY(16)", updatable = false, nullable = false)
     private UUID id;
 
     @CreationTimestamp
@@ -36,8 +37,4 @@ public class ShoppingBasket {
 
     @OneToMany(mappedBy = "shoppingBasket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items;
-}
-
-enum BasketStatus {
-    NEW, PAID, PROCESSED, UNKNOWN
 }

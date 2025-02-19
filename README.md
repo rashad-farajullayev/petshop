@@ -5,6 +5,7 @@
 In the root of the project you can notice docker-compose.yml file.
 This file will setup MariaDB for local testing purposes.
 Just enter the root directory and run 
+
 ```
 docker-compose up -d
 ```
@@ -13,6 +14,15 @@ This will start mariadb database server with `petshop` database.
 Username: thesniffers
 Password: thesniffers_123456
 ```
+
+#### WARNING
+If you have setup previous version of this database in your local
+you should delete old MariaDB data before starting this one again. Because schema has changed.
+```
+    rm -rf ~/.data/thesniffers/mariadb
+```
+
+
 Then you can build and run application with maven:
 ```
 ./mvnw clean package

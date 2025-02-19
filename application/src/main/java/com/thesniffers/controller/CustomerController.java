@@ -1,4 +1,4 @@
-package com.thesniffers.application;
+package com.thesniffers.controller;
 
 import com.thesniffers.dto.CustomerDto;
 import com.thesniffers.service.CustomerService;
