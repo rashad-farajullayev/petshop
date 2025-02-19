@@ -1,12 +1,12 @@
 package com.thesniffers.dao.repository;
 
 import com.thesniffers.dao.model.Customer;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface CustomerRepository extends CrudRepository<Customer, UUID> {
+public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     public Customer findByName(String name);
 }
