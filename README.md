@@ -43,3 +43,10 @@ You will have to enter credentials on the authentication page:
 Welcome page currently prints out some welcome message
 and is creates random Customer record and inserts into the database.
 Currently yet working on other entity definitions
+
+### Postman for testing
+This project already contains test endpoints collection for postman. File is in the root of the repository. It is called
+```
+TheSniffers - PetShop.postman_collection.json
+```
+import this json into your Postman and you can test endpoints.
