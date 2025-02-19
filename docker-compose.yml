@@ -1,0 +1,26 @@
+services:
+  ts_mariadb:
+    image: mariadb:10.6.7-focal
+    container_name: ts_mariadb
+    platform: linux/amd64
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=Gv9hP3u_Lk84yMx2Rt7oF_Vz5Wy9QBn2
+      - MYSQL_DATABASE=petshop
+      - MYSQL_USER=thesniffers
+      - MYSQL_PASSWORD=thesniffers_123456
+      - ALLOW_EMPTY_PASSWORD=no
+    volumes:
+      - ~/.data/thesniffers/mariadb:/var/lib/mysql
+    networks:
+      - the_sniffers_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-pGv9hP3u_Lk84yMx2Rt7oF_Vz5Wy9QBn2"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  the_sniffers_net:
