@@ -8,6 +8,9 @@ import com.thesniffers.dto.ShoppingBasketDto;
 import com.thesniffers.exception.ResourceNotFoundException;
 import com.thesniffers.mapper.ShoppingBasketMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 public class ShoppingBasketService {
 
     private final ShoppingBasketRepository shoppingBasketRepository;

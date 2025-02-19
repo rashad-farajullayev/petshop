@@ -6,12 +6,16 @@ import com.thesniffers.dto.CustomerDto;
 import com.thesniffers.exception.CustomerNotFoundException;
 import com.thesniffers.mapper.CustomerMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
