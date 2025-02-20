@@ -2,6 +2,7 @@ package com.thesniffers.dao.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "shopping_basket")
+@ToString(exclude = {"customer", "items"})
 public class ShoppingBasket {
 
     @Id

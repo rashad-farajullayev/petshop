@@ -7,6 +7,7 @@ import com.thesniffers.dao.repository.ShoppingBasketRepository;
 import com.thesniffers.dto.BasketItemDto;
 import com.thesniffers.exception.ResourceNotFoundException;
 import com.thesniffers.mapper.BasketItemMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 public class BasketItemService {
@@ -31,6 +33,7 @@ public class BasketItemService {
     }
 
     public List<BasketItemDto> getItemsByBasketId(UUID basketId) {
+        log.info("Fetching all basket items by basketId {}", basketId);
         return basketItemRepository.findByShoppingBasketId(basketId)
                 .stream()
                 .map(basketItemMapper::toDto)
@@ -38,31 +41,43 @@ public class BasketItemService {
     }
 
     public Optional<BasketItemDto> getItemById(UUID id) {
+        log.info("Fetching basket item by id {}", id);
         return basketItemRepository.findById(id)
                 .map(basketItemMapper::toDto);
     }
 
     public BasketItemDto createItem(BasketItemDto dto) {
+        log.info("Creating item {}", dto);
         ShoppingBasket basket = shoppingBasketRepository.findById(dto.shoppingBasketId())
                 .orElseThrow(() -> new ResourceNotFoundException("Shopping basket not found"));
 
         Item item = basketItemMapper.toEntity(dto);
         item.setShoppingBasket(basket);
-        return basketItemMapper.toDto(basketItemRepository.save(item));
+        var savedItem = basketItemRepository.save(item);
+        log.info("Saved item {}", savedItem);
+        return basketItemMapper.toDto(savedItem);
     }
 
     public BasketItemDto updateItem(UUID id, BasketItemDto dto) {
+        log.info("Updating item {} into {}", id, dto);
         return basketItemRepository.findById(id)
                 .map(existingItem -> {
                     existingItem.setDescription(dto.description());
                     existingItem.setAmount(dto.amount());
-                    return basketItemMapper.toDto(basketItemRepository.save(existingItem));
+                    var savedItemDto = basketItemMapper.toDto(basketItemRepository.save(existingItem));
+                    log.info("Successfully updated basket item {} into {}", id, savedItemDto);
+                    return savedItemDto;
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Basket item not found"));
+                .orElseThrow(() -> {
+                    log.error("BasketItem {} not found", id);
+                    return new ResourceNotFoundException("Basket item not found");
+                });
     }
 
     public void deleteItem(UUID id) {
+        log.info("Deleting BasketItem {}", id);
         if (!basketItemRepository.existsById(id)) {
+            log.warn("BasketItem {} not found", id);
             throw new ResourceNotFoundException("Basket item not found");
         }
         basketItemRepository.deleteById(id);

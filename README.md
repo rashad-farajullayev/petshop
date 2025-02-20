@@ -32,11 +32,13 @@ java -jar application/target/application-0.0.1-SNAPSHOT.jar
 ### Security
 
 Currently there is only basic authentication. 
-You will have to enter credentials on the authentication page:
+You will have to enter one of these tokens to header as Authentication Bearer.
+Based on the included token, current user's role will be defined
 
 ```
-    Username: user
-    Password: password_123456
+    Admin token: admin-secret-token-123456
+    Tenant 1 token: tenant1-secret-token-abcdef
+    Tenant 2 token: tenant2-secret-token-ghijkl
 ```
 
 ### Welcome
