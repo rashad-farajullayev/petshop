@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,7 +29,7 @@ public class SecurityConfig {
                         // Allow HomeController (`/`) without authentication
                         .requestMatchers("/").permitAll()
                         // Admin can access everything
-                        .requestMatchers("/api/v1/customers/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/customers/**").hasAnyRole("ADMIN", "TENANT")
                         .requestMatchers("/api/v1/shopping-baskets/**").hasAnyRole("ADMIN", "TENANT")
                         .requestMatchers("/api/v1/items/**").hasAnyRole("ADMIN", "TENANT")
 
@@ -40,5 +42,10 @@ public class SecurityConfig {
                 .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new InMemoryUserDetailsManager(); // No default users
     }
 }

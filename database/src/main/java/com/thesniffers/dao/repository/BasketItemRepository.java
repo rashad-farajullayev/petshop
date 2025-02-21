@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ItemRepository extends JpaRepository<Item, UUID> {
+public interface BasketItemRepository extends JpaRepository<Item, UUID> {
 
     // Find all items belonging to a specific shopping basket
     List<Item> findByShoppingBasketId(UUID shoppingBasketId);
@@ -18,4 +18,11 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
     @Modifying
     @Query("DELETE FROM Item i WHERE i.shoppingBasket.id = :shoppingBasketId")
     int deleteAllByShoppingBasketId(UUID shoppingBasketId);
+
+    @Query("""
+        SELECT COUNT(b) > 0 FROM ShoppingBasket b
+        WHERE b.id = :basketId AND (:isAdmin = true OR b.customer.owner = :ownerToken)
+    """)
+    boolean canViewBasketItems(UUID basketId, String ownerToken, boolean isAdmin);
+
 }

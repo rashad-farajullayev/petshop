@@ -26,24 +26,24 @@ public class BasketItemController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BasketItemDto> getItemById(@PathVariable UUID id) {
-        return basketItemService.getItemById(id)
+        return basketItemService.getBasketItemById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<BasketItemDto> createItem(@Valid @RequestBody BasketItemDto dto) {
-        return ResponseEntity.ok(basketItemService.createItem(dto));
+        return ResponseEntity.ok(basketItemService.createBasketItem(dto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<BasketItemDto> updateItem(@PathVariable UUID id, @Valid @RequestBody BasketItemDto dto) {
-        return ResponseEntity.ok(basketItemService.updateItem(id, dto));
+        return ResponseEntity.ok(basketItemService.updateBasketItem(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable UUID id) {
-        basketItemService.deleteItem(id);
+        basketItemService.deleteBasketItem(id);
         return ResponseEntity.noContent().build();
     }
 }

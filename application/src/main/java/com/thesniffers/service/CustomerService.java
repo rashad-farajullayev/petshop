@@ -5,7 +5,9 @@ import com.thesniffers.dao.repository.CustomerRepository;
 import com.thesniffers.dto.CustomerDto;
 import com.thesniffers.exception.CustomerNotFoundException;
 import com.thesniffers.mapper.CustomerMapper;
+import com.thesniffers.security.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,22 +32,26 @@ public class CustomerService {
 
     public List<CustomerDto> getAllCustomers() {
         log.info("Fetching all customers");
-        return customerRepository.findAll()
+        var customers = customerRepository.getAllCustomers(SecurityUtils.getCurrentUserToken(), SecurityUtils.isAdmin())
                 .stream()
                 .map(customerMapper::toDto)
                 .toList();
+        log.info("Fetched customers count: {}", customers.size());
+        return customers;
     }
 
     public Optional<CustomerDto> getCustomerById(UUID id) {
         log.info("Fetching customer with ID: {}", id);
-        return customerRepository.findById(id).map(customerMapper::toDto);
+        return customerRepository.getCustomerById(id,
+                        SecurityUtils.getCurrentUserToken(),
+                        SecurityUtils.isAdmin())
+                .map(customerMapper::toDto);
     }
 
     public CustomerDto createCustomer(CustomerDto dto) {
         log.info("Creating new customer: {}", dto.name());
         Customer customer = customerMapper.toEntity(dto);
-        customer.setOwner("rashad");
-        // TODO: add owner field here
+        customer.setOwner(SecurityUtils.getCurrentUserToken());
         Customer savedCustomer = customerRepository.save(customer);
         log.info("Customer created with ID: {}", savedCustomer.getId());
         return customerMapper.toDto(savedCustomer);
@@ -53,27 +59,50 @@ public class CustomerService {
 
     public CustomerDto updateCustomer(UUID id, CustomerDto dto) {
         log.info("Updating customer with ID: {}", id);
-        return customerRepository.findById(id)
-                .map(existingCustomer -> {
-                    existingCustomer.setName(dto.name());
-                    existingCustomer.setTimezone(dto.timezone());
-                    var updatedCustomer = customerRepository.save(existingCustomer);
-                    log.info("Successfully updated customer with ID: {}", id);
-                    return customerMapper.toDto(updatedCustomer);
-                })
+
+        // Retrieve the customer or throw an exception if not found
+        Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Customer with ID {} not found", id);
                     return new CustomerNotFoundException("Customer not found with ID: " + id);
                 });
+
+        // Check if the current user is ADMIN or owns the customer
+        if (SecurityUtils.isAdmin() || SecurityUtils.getCurrentUserToken().equals(existingCustomer.getOwner())) {
+            existingCustomer.setName(dto.name());
+            existingCustomer.setTimezone(dto.timezone());
+            var updatedCustomer = customerRepository.save(existingCustomer);
+            log.info("Successfully updated customer with ID: {}", id);
+            return customerMapper.toDto(updatedCustomer);
+        } else {
+            log.warn("Unauthorized attempt to update customer with ID: {} by user {}", id, SecurityUtils.getCurrentUserToken());
+            throw new AccessDeniedException("You do not have permission to modify this customer.");
+        }
     }
+
+
 
     public void deleteCustomer(UUID id) {
         log.info("Deleting customer with ID: {}", id);
-        if (!customerRepository.existsById(id)) {
-            log.warn("Customer with ID {} does not exist", id);
-            throw new CustomerNotFoundException("Customer not found with ID: " + id);
+
+        // Retrieve the customer or throw an exception if not found
+        Customer existingCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Customer with ID {} does not exist", id);
+                    return new CustomerNotFoundException("Customer not found with ID: " + id);
+                });
+
+        // Retrieve current user token and role
+        String currentUserToken = SecurityUtils.getCurrentUserToken();
+
+        // Authorization check: Allow only Admins or the Customer Owner
+        if (!SecurityUtils.isAdmin() && !currentUserToken.equals(existingCustomer.getOwner())) {
+            log.warn("Unauthorized attempt by {} to delete customer ID: {}", currentUserToken, id);
+            throw new AccessDeniedException("You do not have permission to delete this customer.");
         }
+
         customerRepository.deleteById(id);
         log.info("Customer with ID {} deleted successfully", id);
     }
+
 }

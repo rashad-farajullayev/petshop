@@ -1,11 +1,11 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} TOKEN: [%X{CURRENT_USER_TOKEN}] ADMIN: [%X{IS_ADMIN}] - %msg%n</pattern>
         </encoder>
     </appender>
-    <logger name="com.thesniffers" level="WARNING"/>
-    <root level="WARN">
+    <logger name="com.thesniffers" level="INFO"/>
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

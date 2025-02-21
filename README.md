@@ -19,9 +19,13 @@ Password: thesniffers_123456
 If you have setup previous version of this database in your local
 you should delete old MariaDB data before starting this one again. Because schema has changed.
 ```
+    docker stop ts_mariadb
+    docker rm ts_mariadb
     rm -rf ~/.data/thesniffers/mariadb
+    docker-compose up -d    
 ```
 
+_if you didn't previously setup this database in your machine, then you can skip deletion part and just launch the docker-compose command_
 
 Then you can build and run application with maven:
 ```
