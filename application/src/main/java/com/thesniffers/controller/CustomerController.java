@@ -3,6 +3,7 @@ package com.thesniffers.controller;
 import com.thesniffers.dto.CustomerDto;
 import com.thesniffers.service.CustomerService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,9 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/customers")
+@RequestMapping(value = "/api/v1/customers",
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
 public class    CustomerController {
 
     private final CustomerService customerService;

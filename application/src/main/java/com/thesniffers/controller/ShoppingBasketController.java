@@ -4,6 +4,7 @@ import com.thesniffers.dto.ShoppingBasketDto;
 import com.thesniffers.service.ShoppingBasketService;
 import com.thesniffers.validation.ValidBasketStatus;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,9 @@ import java.util.UUID;
 
 @RestController
 @Validated
-@RequestMapping("/api/v1/shopping-baskets")
+@RequestMapping(value = "/api/v1/shopping-baskets",
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
 public class ShoppingBasketController {
 
     private final ShoppingBasketService shoppingBasketService;

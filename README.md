@@ -76,7 +76,7 @@ The API uses token-based authentication. Include one of the following tokens in 
 The Welcome Page currently returns a welcome message and inserts a random customer into the database.
 
 ```bash
-GET /welcome
+curl -X GET http://localhost:8080/ -w "\nHTTP Status: %{http_code}\n"
 ```
 
 
