@@ -22,5 +22,27 @@ services:
       retries: 5
       start_period: 30s
 
+  petshop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: petshop
+    platform: linux/amd64
+    depends_on:
+      ts_mariadb:
+        condition: service_healthy  # Wait until MariaDB is ready
+    environment:
+      - SPRING_DATASOURCE_HOST=ts_mariadb
+      - SPRING_DATASOURCE_PORT=3306
+      - SPRING_DATASOURCE_DB=petshop
+      - SPRING_DATASOURCE_USERNAME=thesniffers
+      - SPRING_DATASOURCE_PASSWORD=thesniffers_123456
+      - ENABLE_DEBUG=true
+    ports:
+      - "8080:8080"  # Expose the application
+      - "5005:5005"  # Debugging port
+    networks:
+      - the_sniffers_net
+
 networks:
   the_sniffers_net:

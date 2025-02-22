@@ -7,14 +7,14 @@ INSERT INTO customer (id, name, timezone, created, owner) VALUES
 (X'fe1eaa063db547bcb078bbadf89f33c6', 'Tenant2 Cust3', 'Asia/Tokyo', NOW(), 'tenant2-secret-token-ghijkl');
 
 INSERT INTO shopping_basket (id, created, status, status_date, customer_id) VALUES
-(X'f7d4c6b9dfe94c478e4dd60cf9f6a6a1', NOW(), 'OPEN', NOW(), X'91ab4d34ef2046b2b9a80cf5fef9f83a'),
-(X'bc6d36e938574f36a4d862b88b8ebfcb', NOW(), 'OPEN', NOW(), X'91ab4d34ef2046b2b9a80cf5fef9f83a'),
-(X'e98fbd28c6d84369a5e14b52c624f1b3', NOW(), 'OPEN', NOW(), X'91ab4d34ef2046b2b9a80cf5fef9f83a'),
-(X'13a9dfc1c2b341e78a16a8e1f4952eb9', NOW(), 'OPEN', NOW(), X'52e88c2f9c9648e784dc6c4c38dff25f'),
-(X'85b7cd8fd729490ca2a2de192be92ff7', NOW(), 'OPEN', NOW(), X'52e88c2f9c9648e784dc6c4c38dff25f'),
-(X'ef492dff4cf143e59eaa512c4cf0a9bd', NOW(), 'OPEN', NOW(), X'd2a1e389ba9d40e0b5d66fd01d9e09d7'),
-(X'8fae5c90d4df45f4b2ee7687e874c8fc', NOW(), 'OPEN', NOW(), X'7acaf91db9b54135a21fd8cbe78e4f9c'),
-(X'c2d3f891a1f04c5d8922f4e4b7b8c9df', NOW(), 'OPEN', NOW(), X'7acaf91db9b54135a21fd8cbe78e4f9c');
+(X'f7d4c6b9dfe94c478e4dd60cf9f6a6a1', NOW(), 'NEW', NOW(), X'91ab4d34ef2046b2b9a80cf5fef9f83a'),
+(X'bc6d36e938574f36a4d862b88b8ebfcb', NOW(), 'PAID', NOW(), X'91ab4d34ef2046b2b9a80cf5fef9f83a'),
+(X'e98fbd28c6d84369a5e14b52c624f1b3', NOW(), 'PROCESSED', NOW(), X'91ab4d34ef2046b2b9a80cf5fef9f83a'),
+(X'13a9dfc1c2b341e78a16a8e1f4952eb9', NOW(), 'UNKNOWN', NOW(), X'52e88c2f9c9648e784dc6c4c38dff25f'),
+(X'85b7cd8fd729490ca2a2de192be92ff7', NOW(), 'NEW', NOW(), X'52e88c2f9c9648e784dc6c4c38dff25f'),
+(X'ef492dff4cf143e59eaa512c4cf0a9bd', NOW(), 'PAID', NOW(), X'd2a1e389ba9d40e0b5d66fd01d9e09d7'),
+(X'8fae5c90d4df45f4b2ee7687e874c8fc', NOW(), 'PROCESSED', NOW(), X'7acaf91db9b54135a21fd8cbe78e4f9c'),
+(X'c2d3f891a1f04c5d8922f4e4b7b8c9df', NOW(), 'UNKNOWN', NOW(), X'7acaf91db9b54135a21fd8cbe78e4f9c');
 
 INSERT INTO basket_items (id, description, amount, shopping_basket_id) VALUES
 (X'ee6a5f8db37f4ddaa2dc68c3b1f1e6fb', 'Premium Dog Food', 2, X'f7d4c6b9dfe94c478e4dd60cf9f6a6a1'),

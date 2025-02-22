@@ -1,6 +1,7 @@
 package com.thesniffers.exception;
 
 import jakarta.validation.ConstraintViolation;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -55,6 +56,21 @@ public class GlobalExceptionHandler {
         Map<String, String> response = new HashMap<>();
         response.put("error", "Record already exists.");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    // Handles case when in the database baskets have been saved with wrong status
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<String> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex) {
+        if (ex.getCause() instanceof IllegalArgumentException) {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body("Invalid shopping basket status found in the database. " +
+                            "Expected values: [NEW, PAID, PROCESSED, UNKNOWN]. " +
+                            "Please check your database entries.");
+        }
+        return ResponseEntity
+                .status(HttpStatus.EXPECTATION_FAILED)
+                .body("A database error occurred. Please contact support.");
     }
 }
 
