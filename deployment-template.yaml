@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pet-shop
+  labels:
+    app: pet-shop
+spec:
+  replicas: 2  # Number of replicas
+  selector:
+    matchLabels:
+      app: pet-shop
+  template:
+    metadata:
+      labels:
+        app: pet-shop
+    spec:
+      containers:g
+        - name: pet-shop
+          image: image-registry/pet-shop:latest  # Replace with the actual image
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_HOST
+              value: "ts_mariadb"
+            - name: SPRING_DATASOURCE_PORT
+              value: "3306"
+            - name: SPRING_DATASOURCE_DATABASE
+              value: "petshop"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "thesniffers"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "thesniffers_123456"
+            - name: ENABLE_DEBUG
+              value: "false"
+
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
+          # Liveness Probe - Checks if the application is alive
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          # Readiness Probe - Ensures the app is ready before receiving traffic
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pet-shop-service
+spec:
+  selector:
+    app: pet-shop
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP  # Change to LoadBalancer if needed for external access

@@ -157,5 +157,5 @@ docker run --name pet-shop --platform linux/amd64 \
 * If using a non-dockerized MariaDB instance, update SPRING_DATASOURCE_HOST to localhost or the relevant IP.
 
 * For security reasons, do not expose debugging ports in production environments.
-
+    
 * Consider using secrets management for handling credentials in production.

@@ -40,12 +40,15 @@ public class CustomerService {
         return customers;
     }
 
-    public Optional<CustomerDto> getCustomerById(UUID id) {
+    public CustomerDto getCustomerById(UUID id) {
         log.info("Fetching customer with ID: {}", id);
-        return customerRepository.getCustomerById(id,
-                        SecurityUtils.getCurrentUserToken(),
-                        SecurityUtils.isAdmin())
-                .map(customerMapper::toDto);
+
+        return customerRepository.getCustomerById(id, SecurityUtils.getCurrentUserToken(), SecurityUtils.isAdmin())
+                .map(customerMapper::toDto)
+                .orElseThrow(() -> {
+                    log.warn("Customer with ID {} not found", id);
+                    return new CustomerNotFoundException("Customer not found with ID: " + id);
+                });
     }
 
     public CustomerDto createCustomer(CustomerDto dto) {

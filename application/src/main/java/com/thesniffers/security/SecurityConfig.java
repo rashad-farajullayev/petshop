@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/customers/**").hasAnyRole("ADMIN", "TENANT")
                         .requestMatchers("/api/v1/shopping-baskets/**").hasAnyRole("ADMIN", "TENANT")
                         .requestMatchers("/api/v1/items/**").hasAnyRole("ADMIN", "TENANT")
+                        .requestMatchers("/actuator/**", "/actuator/info").permitAll()
 
                         // Any other request must be authenticated
                         .anyRequest().authenticated()

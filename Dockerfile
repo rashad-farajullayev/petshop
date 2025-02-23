@@ -2,7 +2,6 @@ FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 COPY . .
 
-RUN ./mvnw dependency:go-offline
 RUN ./mvnw package
 
 FROM eclipse-temurin:21-jdk
