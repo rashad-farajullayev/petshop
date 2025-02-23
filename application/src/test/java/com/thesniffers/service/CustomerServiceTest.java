@@ -23,11 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CustomerServiceTest {
+class CustomerServiceTest extends ServiceTestBase{
 
-    public static final String TENANT_1_SECRET_TOKEN = "tenant1-secret-token-abcdef";
-    public static final String CUSTOMER_NAME = "John Doe";
-    public static final String CUSTOMER_TIMEZONE = "UTC";
     @Mock
     private CustomerRepository customerRepository;
 
@@ -41,8 +38,6 @@ class CustomerServiceTest {
     private Customer customer;
     private CustomerDto customerDto;
     private String tenantToken;
-
-    private MockedStatic<SecurityUtils> securityMock;
 
     @BeforeEach
     void setUp() {
@@ -60,22 +55,6 @@ class CustomerServiceTest {
         customerRepository = Mockito.mock(CustomerRepository.class);
         customerMapper = Mockito.mock(CustomerMapper.class);
         customerService = new CustomerService(customerRepository, customerMapper);
-    }
-
-    private void mockCurrentUser() {
-        // Mock SecurityUtils to return the desired tenant token
-        securityMock = mockStatic(SecurityUtils.class);
-        securityMock.when(SecurityUtils::getCurrentUserToken).thenReturn(TENANT_1_SECRET_TOKEN);
-        securityMock.when(SecurityUtils::isAdmin).thenReturn(false);
-    }
-
-    @AfterEach
-    void tearDown() {
-        // Ensure MockedStatic is properly closed after each test
-        if (securityMock != null) {
-            securityMock.close();
-        }
-
     }
 
     @Test
