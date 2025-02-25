@@ -83,6 +83,7 @@ public class ShoppingBasketService {
         ShoppingBasket basket = shoppingBasketMapper.toEntity(dto);
         basket.setCustomer(customer);
         basket.setCreated(ZonedDateTime.now());
+        basket.setStatusDate(ZonedDateTime.now());
         var savedBasket = shoppingBasketRepository.save(basket);
 
         log.info("Successfully created shopping basket: {}", savedBasket);

@@ -1,6 +1,5 @@
 package com.thesniffers.dao.repository;
 
-import aj.org.objectweb.asm.commons.Remapper;
 import com.thesniffers.dao.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
