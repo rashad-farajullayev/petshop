@@ -29,6 +29,7 @@ public class SecurityConfig {
                         // Allow HomeController (`/`) without authentication
                         .requestMatchers("/").permitAll()
                         // Admin can access everything
+                        .requestMatchers("/api/v1/admin/query/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/customers/**").hasAnyRole("ADMIN", "TENANT")
                         .requestMatchers("/api/v1/shopping-baskets/**").hasAnyRole("ADMIN", "TENANT")
                         .requestMatchers("/api/v1/items/**").hasAnyRole("ADMIN", "TENANT")

@@ -1,5 +1,6 @@
 package com.thesniffers.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
@@ -25,5 +26,6 @@ public class Item {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shopping_basket_id", nullable = false)
+    @JsonBackReference
     private ShoppingBasket shoppingBasket;
 }

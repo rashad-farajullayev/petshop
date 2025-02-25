@@ -1,4 +1,5 @@
 package com.thesniffers.dao.model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,5 +35,6 @@ public class Customer {
     private String owner; // Owner token
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ShoppingBasket> shoppingBaskets;
 }
