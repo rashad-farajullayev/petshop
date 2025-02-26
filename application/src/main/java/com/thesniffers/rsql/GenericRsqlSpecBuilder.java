@@ -27,7 +27,7 @@ public class GenericRsqlSpecBuilder<T> {
                 .stream()
                 .map(this::createSpecification)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
 
         if (specs.isEmpty()) {
             return null;
