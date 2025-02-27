@@ -13,9 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/v1/customers",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/customers")
 public class    CustomerController {
 
     private final CustomerService customerService;
@@ -27,19 +25,19 @@ public class    CustomerController {
         this.customerApiRequestMetrics = customerApiRequestMetrics;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CustomerDto>> getAllCustomers() {
         customerApiRequestMetrics.incrementApiCall();
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDto> getCustomerById(@PathVariable UUID id) {
         customerApiRequestMetrics.incrementApiCall();
         return ResponseEntity.ok(customerService.getCustomerById(id));
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto dto) {
         customerApiRequestMetrics.incrementApiCall();
         return ResponseEntity.status(HttpStatus.CREATED)
