@@ -1,6 +1,7 @@
 package com.thesniffers.exception;
 
 import jakarta.validation.ConstraintViolation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     // Used for @RequestBody Validation
@@ -25,6 +27,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
 
+        log.error(ex.getMessage(), ex);
         return ResponseEntity.badRequest().body(errors);
     }
 
@@ -37,16 +40,19 @@ public class GlobalExceptionHandler {
                         ConstraintViolation::getMessage
                 ));
 
+        log.error(ex.getMessage(), ex);
         return ResponseEntity.badRequest().body(errors);
     }
 
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<String> handleCustomerNotFoundException(CustomerNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
@@ -55,12 +61,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("error", "Record already exists.");
+        log.error(ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     // Handles case when in the database baskets have been saved with wrong status
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
     public ResponseEntity<String> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex) {
+        log.error(ex.getMessage(), ex);
         if (ex.getCause() instanceof IllegalArgumentException) {
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
