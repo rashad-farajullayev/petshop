@@ -59,18 +59,18 @@ public class GlobalExceptionHandler {
     }
 
     // Handles case when in the database baskets have been saved with wrong status
-//    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
-//    public ResponseEntity<String> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex) {
-//        if (ex.getCause() instanceof IllegalArgumentException) {
-//            return ResponseEntity
-//                    .status(HttpStatus.EXPECTATION_FAILED)
-//                    .body("Invalid shopping basket status found in the database. " +
-//                            "Expected values: [NEW, PAID, PROCESSED, UNKNOWN]. " +
-//                            "Please check your database entries.");
-//        }
-//        return ResponseEntity
-//                .status(HttpStatus.EXPECTATION_FAILED)
-//                .body("A database error occurred. Please contact support.");
-//    }
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<String> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex) {
+        if (ex.getCause() instanceof IllegalArgumentException) {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body("Invalid shopping basket status found in the database. " +
+                            "Expected values: [NEW, PAID, PROCESSED, UNKNOWN]. " +
+                            "Please check your database entries.");
+        }
+        return ResponseEntity
+                .status(HttpStatus.EXPECTATION_FAILED)
+                .body("A database error occurred. Please contact support.");
+    }
 }
 

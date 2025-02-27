@@ -2,7 +2,7 @@ FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 COPY . .
 
-RUN ./mvnw package
+RUN ./mvnw clean install
 
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
